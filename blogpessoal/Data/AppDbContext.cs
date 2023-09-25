@@ -23,9 +23,10 @@ namespace blogpessoal.Data
                                    .Where(x => x.State == EntityState.Added)
                                    .Select(x => x.Entity);
 
+            //insertedEntry: vê se é uma inserção
             foreach (var insertedEntry in insertedEntries)
             {
-                //Se uma propriedade da Classe Auditable estiver sendo criada. 
+                //Se uma propriedade da Classe Auditable estiver sendo criada vai ter metodo responssável por persistir a informação
                 if (insertedEntry is Auditable auditableEntity)
                 {
                     auditableEntity.Data = DateTimeOffset.UtcNow;

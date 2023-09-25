@@ -6,44 +6,74 @@ namespace blogpessoal.Service.Implements
 {
     public class PostagemService : IPostagemService
     {
-        //Estamos fazendo uma injeção de dependencia onde ASP.NET que vai criar ?????????????
+        //Estamos fazendo uma injeção de dependencia 
         //todos os objetos que forem somente leitura começam com _
         private readonly AppDbContext _context;
 
+        //metodo construtor
         public PostagemService(AppDbContext context)
         {
             _context = context;
         }
-
-        public Task<Postagem?> Create(Postagem postagem)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Postagem?> Delete(Postagem postagem)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<Postagem>> GetAll()
         {
             //Postagens é meu DbSet
             return await _context.Postagens.ToListAsync();   //await: fica esperando uma resposta enquanto as outras coisas rodam
         }
 
-        public Task<Postagem?> GetById(long id)
+        //metodo async: não vai bloquear meu codigo ewnquanto eu faço a busca
+        public async Task<Postagem?> GetById(long id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var PostagemUpdate = await _context.Postagens.FirstAsync(i => i.Id == id);
+                
+                return PostagemUpdate;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public Task<IEnumerable<Postagem>> GetByTituulo(string titulo)
+        public async Task<IEnumerable<Postagem>> GetByTitulo(string titulo)
         {
-            throw new NotImplementedException();
+           var Postagem = await _context.Postagens
+                         .Where(p => p.Titulo.Contains(titulo))
+                         .ToListAsync();
+            return Postagem;
         }
 
-        public Task<Postagem?> Update(Postagem postagem)
+        public async Task<Postagem?> Create(Postagem postagem)
         {
-            throw new NotImplementedException();
+            //adiciona na fila
+            await _context.Postagens.AddAsync(postagem);
+            //persiste na fila
+            await _context.SaveChangesAsync();
+
+            return postagem;
         }
+        public async Task<Postagem?> Update(Postagem postagem)
+        {
+            var PostagemUpdate = await _context.Postagens.FindAsync(postagem.Id);
+
+            if(PostagemUpdate is null) 
+            {
+                return null;
+            }
+
+            _context.Entry(PostagemUpdate).State = EntityState.Detached;
+            _context.Entry(postagem).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return postagem;    
+        }
+
+        public async Task Delete(Postagem postagem)
+        {
+            _context.Remove(postagem);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
