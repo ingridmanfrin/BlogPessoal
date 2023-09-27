@@ -16,8 +16,13 @@ namespace blogpessoal
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
+            
+            //quando for fazer a descerialização do objeto não fazer um loop infinito
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
 
             //Conecção com o Banco de Dados 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //estou indicando para a minha aplicação qual é a string de conecção que estou usando que puchei lá de appsettings.json
@@ -30,10 +35,13 @@ namespace blogpessoal
             //Registrar a Validações das Entidades
             //AddTransient: só vai instanciar quando vc precisar, para cadastrar e atualizar
             builder.Services.AddTransient<IValidator<Postagem>,PostagemValidator>();
+            
+            builder.Services.AddTransient<IValidator<Tema>, TemaValidator>();
 
             //Registrar as Classes de Serviço (Service)
             //AddScoped: 
             builder.Services.AddScoped<IPostagemService, PostagemService>();
+            builder.Services.AddScoped<ITemaService, TemaService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -53,7 +61,7 @@ namespace blogpessoal
 
             var app = builder.Build();
 
-            //Criar o Bancod e Dados e as Tabelas
+            //Criar o Banco de Dados e as Tabelas
             using ( var scope = app.Services.CreateAsyncScope()) //CreateAsyncScope cria o banco de dados e tabelas ele consulta a classe de contexto identifica todas as tabelas que tem que criar e cria o banco e tabelas
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
