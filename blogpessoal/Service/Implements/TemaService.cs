@@ -21,7 +21,6 @@ namespace blogpessoal.Service.Implements
                 .ToListAsync();   
         }
 
-        
         public async Task<Tema?> GetById(long id)
         {
             try

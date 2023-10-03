@@ -20,7 +20,9 @@ namespace blogpessoal.Service.Implements
         {
             //Postagens é meu DbSet
             return await _context.Postagens
+                //.Include : verifica se tem um tema em postagem
                 .Include(postagem => postagem.Tema)
+                .Include(p => p.Usuario)
                 .ToListAsync();   //await: fica esperando uma resposta enquanto as outras coisas rodam
         }
 
@@ -31,7 +33,8 @@ namespace blogpessoal.Service.Implements
             {
                 var PostagemUpdate = await _context.Postagens
                     .Include(postagem => postagem.Tema)
-                    .FirstAsync(i => i.Id == id);
+                    .Include(p => p.Usuario)
+                    .FirstAsync(p => p.Id == id);
                 
                 return PostagemUpdate;
             }
@@ -45,6 +48,7 @@ namespace blogpessoal.Service.Implements
         {
            var Postagem = await _context.Postagens
                          .Include(postagem => postagem.Tema)
+                         .Include(p => p.Usuario)
                          .Where(p => p.Titulo.Contains(titulo))
                          .ToListAsync();
             return Postagem;
@@ -63,7 +67,8 @@ namespace blogpessoal.Service.Implements
                 
                 postagem.Tema = BuscaTema;
             }
-            //postagem.Tema = postagem.Tema is not null ? _context.Temas.FirstOrDefault(t => t.Id == postagem.Tema.Id) : null;
+
+            postagem.Usuario = postagem.Usuario is not null ? await _context.Users.FirstOrDefaultAsync(u => u.Id == postagem.Usuario.Id) : null;
 
             //adiciona na fila
             await _context.Postagens.AddAsync(postagem);
@@ -74,6 +79,7 @@ namespace blogpessoal.Service.Implements
         }
         public async Task<Postagem?> Update(Postagem postagem)
         {
+            //esses ifs de update do service somente verificam se não é null as validações a respeito de se ==0 ou se realmente existe um id mesmo fica por conta da Controller!
             var PostagemUpdate = await _context.Postagens.FindAsync(postagem.Id);
 
             if(PostagemUpdate is null) 
