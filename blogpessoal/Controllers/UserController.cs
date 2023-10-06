@@ -47,12 +47,6 @@ namespace blogpessoal.Controllers
             return Ok(Resposta);
         }
 
-        //[HttpGet("descricao/{descricao}")]
-        //public async Task<ActionResult> GetByDescricao(string descricao)
-        //{
-        //    return Ok(await _userService.GetByDescricao(descricao));
-        //}
-
         [AllowAnonymous]
         [HttpPost("cadastrar")]
         public async Task<ActionResult> Create([FromBody] User user)

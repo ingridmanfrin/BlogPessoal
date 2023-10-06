@@ -27,6 +27,7 @@ namespace blogpessoal
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 });
 
             //Conecção com o Banco de Dados 
@@ -108,7 +109,6 @@ namespace blogpessoal
             app.UseAuthentication();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

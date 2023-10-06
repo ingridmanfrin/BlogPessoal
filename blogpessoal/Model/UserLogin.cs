@@ -15,6 +15,7 @@ namespace blogpessoal.Model
         public string Senha { get; set; } = string.Empty;
      
         public string Foto { get; set; } = string.Empty;
+        
         //token não vai ser gravado no banco de dados
         public string Token { get; set; } = string.Empty;
 
