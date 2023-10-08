@@ -29,7 +29,7 @@ namespace blogpessoal.Controllers
         }
 
         //async: metodo assíncrono
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult> GetAll()
         {
             //await: espera que o resultado da função seja retornado

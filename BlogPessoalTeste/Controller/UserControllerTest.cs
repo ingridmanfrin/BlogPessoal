@@ -15,6 +15,7 @@ namespace blogpessoaltest.Controllers
         protected readonly WebAppFactory _factory;
         protected HttpClient _client;
 
+        //dynamic: é um objeto genérico, não tem tipo definido (é mais indicado para testes)
         private readonly dynamic token;
         private string Id { get; set; } = string.Empty;
 
@@ -24,8 +25,8 @@ namespace blogpessoaltest.Controllers
             _client = factory.CreateClient();
 
             token = GetToken();
-        }
-
+        }              
+                                                                             
         private static dynamic GetToken()
         {
             dynamic data = new ExpandoObject();
