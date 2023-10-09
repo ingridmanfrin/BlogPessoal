@@ -79,7 +79,7 @@ namespace blogpessoal.Service.Implements
         }
         public async Task<Postagem?> Update(Postagem postagem)
         {
-            //esses ifs de update do service somente verificam se não é null as validações a respeito de se ==0 ou se realmente existe um id mesmo fica por conta da Controller!
+            //esses ifs de update do service somente verificam se não é null as validações. A respeito de se ==0 ou se realmente existe um id mesmo fica por conta da Controller!
             var PostagemUpdate = await _context.Postagens.FindAsync(postagem.Id);
 
             if(PostagemUpdate is null) 
