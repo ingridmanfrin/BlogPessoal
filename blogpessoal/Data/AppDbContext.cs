@@ -11,12 +11,14 @@ namespace blogpessoal.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
             //MODEL GERA AS TABELAS
             modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
             modelBuilder.Entity<Tema>().ToTable("tb_temas");
             modelBuilder.Entity<User>().ToTable("tb_usuarios");
 
             _ = modelBuilder.Entity<Postagem>()
+                
                 .HasOne(_ =>_.Tema)                  //indica lado um da relação
                 .WithMany(t => t.Postagem)           //indica lado muitos da relação
                 .HasForeignKey("TemaId")            //indica foringkey
