@@ -20,6 +20,7 @@ namespace blogpessoal.Service.Implements
         {
             //Postagens é meu DbSet
             return await _context.Postagens
+                .AsNoTracking()
                 //.Include : verifica se tem um tema em postagem
                 .Include(postagem => postagem.Tema)
                 .Include(p => p.Usuario)
