@@ -7,11 +7,13 @@ namespace blogpessoal.Data
     
     public class AppDbContext: DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
+        
+            this.ChangeTracker.LazyLoadingEnabled = false;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            this.ChangeTracker.LazyLoadingEnabled = false;
             //MODEL GERA AS TABELAS
             modelBuilder.Entity<Postagem>().ToTable("tb_postagens");
             modelBuilder.Entity<Tema>().ToTable("tb_temas");
