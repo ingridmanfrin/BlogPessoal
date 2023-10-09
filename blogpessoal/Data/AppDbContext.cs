@@ -48,7 +48,7 @@ namespace blogpessoal.Data
                 if (insertedEntry is Auditable auditableEntity)
                 {
                     //new TimeSpan(-3,0,0): criamos um novo datime e arrumamos o utc que é -3 horas do de greenwich (com exeção de de alguns estados do Brasil)
-                    auditableEntity.Data = new DateTimeOffset(DateTime.Now, new TimeSpan(-3,0,0));
+                    auditableEntity.Data = new DateTimeOffset(DateTime.Now.ToUniversalTime(), new TimeSpan(-3,0,0));
                 }
             }
 
@@ -61,7 +61,7 @@ namespace blogpessoal.Data
                 //Se uma propriedade da Classe Auditable estiver sendo atualizada.  
                 if (modifiedEntry is Auditable auditableEntity)
                 {
-                    auditableEntity.Data = new DateTimeOffset(DateTime.Now, new TimeSpan(-3, 0, 0)); ;
+                    auditableEntity.Data = new DateTimeOffset(DateTime.Now.ToUniversalTime(), new TimeSpan(-3, 0, 0)); ;
                 }
             }
 
