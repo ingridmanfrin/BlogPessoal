@@ -160,12 +160,8 @@ namespace blogpessoal
             }
 
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
+            
                 app.UseSwagger();
-
-                app.UseSwaggerUI();
-            //}
 
             // Swagger como Página Inicial (Home) na Nuvem
             if (app.Environment.IsProduction())
