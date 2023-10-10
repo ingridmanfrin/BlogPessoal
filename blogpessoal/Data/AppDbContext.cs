@@ -1,4 +1,5 @@
-﻿using blogpessoal.Model;
+﻿using blogpessoal.Configuration;
+using blogpessoal.Model;
 using blogpessoal.Validator;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +8,7 @@ namespace blogpessoal.Data
     
     public class AppDbContext: DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {
-        
-            this.ChangeTracker.LazyLoadingEnabled = false;
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +68,15 @@ namespace blogpessoal.Data
             }
 
             return base.SaveChangesAsync(cancellationToken);
+
+        }
+
+        // Ajusta a Data para o formato UTC - Compatível com qualquer Banco de dados Relacional
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder
+                .Properties<DateTimeOffset>()
+                .HaveConversion<DateTimeOffsetConverter>();
         }
     }
 }

@@ -12,13 +12,13 @@ namespace blogpessoal.Service.Implements
         {
             _context = context;
         }
-        
+
         public async Task<IEnumerable<Tema>> GetAll()
         {
-            
+
             return await _context.Temas
                 .Include(t => t.Postagem)
-                .ToListAsync();   
+                .ToListAsync();
         }
 
         public async Task<Tema?> GetById(long id)
@@ -41,7 +41,8 @@ namespace blogpessoal.Service.Implements
         {
             var Tema = await _context.Temas
                           .Include(t => t.Postagem)
-                          .Where(d => d.Descricao.Contains(descricao))
+                          .Where(T => T.Descricao.ToUpper()
+                                .Contains(descricao.ToUpper()))
                           .ToListAsync();
             return Tema;
         }
