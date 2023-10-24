@@ -36,7 +36,7 @@ namespace blogpessoal.Service.Implements
                     .Include(postagem => postagem.Tema)
                     .Include(p => p.Usuario)
                     .FirstAsync(p => p.Id == id);
-                
+
                 return PostagemUpdate;
             }
             catch
@@ -47,25 +47,28 @@ namespace blogpessoal.Service.Implements
 
         public async Task<IEnumerable<Postagem>> GetByTitulo(string titulo)
         {
-           var Postagem = await _context.Postagens
-                         .Include(postagem => postagem.Tema)
-                         .Include(p => p.Usuario)
-                         .Where(p => p.Titulo.Contains(titulo))
-                         .ToListAsync();
+            var Postagem = await _context.Postagens
+                          .AsNoTracking()
+                          .Include(postagem => postagem.Tema)
+                          .Include(p => p.Usuario)
+                          .Where(p => p.Titulo.ToUpper()
+                                .Contains(titulo.ToUpper())
+                           )
+                          .ToListAsync();
             return Postagem;
         }
 
         public async Task<Postagem?> Create(Postagem postagem)
         {
-            if(postagem.Tema is not null)
+            if (postagem.Tema is not null)
             {
-                var BuscaTema = await _context.Temas.FindAsync(postagem.Tema.Id); 
-                
-                if(BuscaTema is null)
+                var BuscaTema = await _context.Temas.FindAsync(postagem.Tema.Id);
+
+                if (BuscaTema is null)
                 {
                     return null;
                 }
-                
+
                 postagem.Tema = BuscaTema;
             }
 
@@ -83,7 +86,7 @@ namespace blogpessoal.Service.Implements
             //esses ifs de update do service somente verificam se não é null as validações. A respeito de se ==0 ou se realmente existe um id mesmo fica por conta da Controller!
             var PostagemUpdate = await _context.Postagens.FindAsync(postagem.Id);
 
-            if(PostagemUpdate is null) 
+            if (PostagemUpdate is null)
             {
                 return null;
             }
@@ -104,7 +107,7 @@ namespace blogpessoal.Service.Implements
             _context.Entry(postagem).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return postagem;    
+            return postagem;
         }
 
         public async Task Delete(Postagem postagem)

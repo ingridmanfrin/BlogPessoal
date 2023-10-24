@@ -152,6 +152,9 @@ namespace blogpessoal
 
             var app = builder.Build();
 
+            // habilita a compatibilidade com o tipo de dado DateTimeOffset no Banco de dados PostgreSQL
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             //Criar o Banco de Dados e as Tabelas
             using (var scope = app.Services.CreateAsyncScope()) //CreateAsyncScope cria o banco de dados e tabelas ele consulta a classe de contexto identifica todas as tabelas que tem que criar e cria o banco e tabelas
             {
@@ -162,6 +165,7 @@ namespace blogpessoal
             // Configure the HTTP request pipeline.
             
                 app.UseSwagger();
+                app.UseSwaggerUI();
 
             // Swagger como Página Inicial (Home) na Nuvem
             if (app.Environment.IsProduction())
