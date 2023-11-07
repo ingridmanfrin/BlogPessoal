@@ -63,7 +63,7 @@ namespace blogpessoal.Service.Implements
             }
             if(usuario.Foto is null || usuario.Foto == "")
             {
-                usuario.Foto = "https://i.imgur.com/I8MfmC8.png";
+                usuario.Foto = "https://cdn.pixabay.com/photo/2012/04/01/18/22/user-23874_1280.png";
             }
             
             //definindo como que a minha senha vai ser criptografada
@@ -86,7 +86,7 @@ namespace blogpessoal.Service.Implements
             
             if (usuario.Foto is null || usuario.Foto == "")
             {
-                usuario.Foto = "https://i.imgur.com/I8MfmC8.png";
+                usuario.Foto = "https://cdn.pixabay.com/photo/2012/04/01/18/22/user-23874_1280.png";
             }
 
             //definindo como que a minha senha vai ser criptografada
